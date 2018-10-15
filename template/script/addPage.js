@@ -9,3 +9,8 @@ function addSubmit() {
   });
   return false;
 }
+
+function goBack(){
+    location.href = "/";
+    return false;
+}

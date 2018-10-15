@@ -25,8 +25,8 @@
 				Faviourate: <input type="checkbox" name="fav"><br>
 			<div>
 		</form>
-		<button type="Submit" form="add-form" value="Add" onclick="addSubmit()">Add</button>
-		<button type="Submit" value="back" onclick="addSubmit()"> back</button>
+		<button type="Submit" form="add-form" value="Add" onclick="addSubmit()" onsubmit="return false">Add</button>
+		<button type="Submit" value="back" onclick="goBack()" onsubmit="return false"> back</button>
 		<p id="add-result">
 		</p>
 	</body>
