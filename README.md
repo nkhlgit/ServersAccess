@@ -9,3 +9,4 @@ ServerAccess tool uses sqllite to store servers information. It send request ins
 1. install putty and windscp.
 2. download sqllite and place it in same folder as main.go.
 3. Run main.go 
+4. access http://localhost:8080
