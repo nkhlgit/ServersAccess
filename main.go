@@ -28,6 +28,7 @@ type server struct {
 	Datacenter           string
 	WebPrefix            string
 	WebSuffix            string
+	Fav                  string
 	DateTimeLastAccessed string
 }
 
@@ -159,27 +160,36 @@ func connect(w http.ResponseWriter, r *http.Request) {
 func addSubmit(w http.ResponseWriter, r *http.Request) {
 	// get the form data entered in add-form with name as in form
 	r.ParseForm()
-	name, ip, hostname, osUser, osPassword, osPort, webPort, product, datacenter, webPrefix, webSuffix, fav := r.Form["name"][0],
+	var s server
+	ss := make([]server, 1)
+	s.Name, s.IP, s.Hostname, s.OsUser, s.OsPassword, s.OsPort, s.WebPort, s.Product, s.Datacenter, s.WebPrefix, s.WebSuffix, s.Fav = r.Form["name"][0],
 		r.Form["ip"][0], r.Form["hostname"][0], r.Form["osUser"][0], r.Form["osPassword"][0], r.Form["osPort"][0], r.Form["webPort"][0], r.Form["product"][0],
 		r.Form["datacenter"][0], r.Form["webPrefix"][0], r.Form["webSuffix"][0], r.Form["fav"][0]
+	ss[0] = s
+	res := addServerDb(ss)
+	w.Write([]byte(res))
+	return
+}
 
+func addServerDb(ss []server) (res string) {
+	res = "Server added: "
 	db, _ := sql.Open("sqlite3", "./dc.db")
 	statement, _ := db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
 		"webPort,product,datacenter,webPrefix,webSuffix,fav, dateTimeCreated, dateTimeModified," +
 		"dateTimeLastAccessed ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	var timeNow string
-	timeNow = time.Now().Format(time.RFC3339)
-	_, err := statement.Exec(name, ip, hostname, osUser, osPassword, osPort, webPort,
-		product, datacenter, webPrefix, webSuffix, fav, timeNow, timeNow, timeNow)
-	var res string
-	if err != nil {
-		res = err.Error()
-	} else {
-		res = "Server added: " + name
+	for _, s := range ss {
+		timeNow = time.Now().Format(time.RFC3339)
+		_, err := statement.Exec(s.Name, s.IP, s.Hostname, s.OsUser, s.OsPassword, s.OsPort, s.WebPort,
+			s.Product, s.Datacenter, s.WebPrefix, s.WebSuffix, s.Fav, timeNow, timeNow, timeNow)
+		if err != nil {
+			res = res + " " + err.Error()
+		} else {
+			res = res + " " + s.Name
+		}
 	}
-	w.Write([]byte(res))
 	db.Close()
-	return
+	return res
 }
 
 func deleteServer(w http.ResponseWriter, r *http.Request) {
