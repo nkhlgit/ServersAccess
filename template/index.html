@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>DATACENTER</title>
+		<link rel="stylesheet" type="text/css" href="style/index.css"/>
+		<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="script/tbody1.js"></script>
+	</head>
+
+	<body>
+		<div id="message">
+		
+		</div>
+		<div id="connect" >
+			<form id="ftp-form"   onsubmit="return false" >
+					<input type="button" value="FTP" onclick='access("ftp")' />
+			</form>
+			<form id="web-form"   onsubmit="return false" >
+					<input type="button" value="WEB" onclick='access("web")' />
+			</form>
+			<form id="ssh-form"   onsubmit="return false" >
+					<input type="button" value="SSH" onclick='access("ssh")' />
+			</form>
+		</div>
+
+		<div id="house" >
+			<form id="search-form" onsubmit="return false">
+				<input name="search" />
+				<input type="submit" value="Search" onclick="submitSearch()" />
+			</form>
+			<form id="addServer"   onsubmit="return false" >
+					<input type="button" value="AddServer" onclick='addPage()' />
+			</form>
+			<form id="delete-form"   onsubmit="return false" >
+					<input type="button" value="Delete" onclick='deleteServer()' />
+			</form>
+</div>
+		<table width=100%>
+			<thead >
+				<tr style="text-align: left;">
+					<th width="5%">SrvId</th>
+					<th width="10%">Name</th>
+					<th width="10%">IP</th>
+					<th width="10%">Hostname</th>
+					<th width="10%">Product</th>
+					<th width="10%">Datacenter</th>
+					<th width="10%">LastAccessed</th>
+				</tr>
+			</thead>
+			<tbody id="search-results" >
+				<link rel="stylesheet" type="text/css" href="style/index.css"/>
+			</tbody>
+		</table>
+		
+	
+	</body>
+
+</html>

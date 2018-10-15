@@ -1,0 +1,34 @@
+body {
+  color: black;
+  background: lightblue;
+}
+
+#house form
+{
+    display: inline-block;
+    float: left;
+}
+
+#connect form
+{
+    display: inline-block;
+    float: right;
+}
+
+thead {
+  background: green;
+}
+
+body table tbody {
+  background: lightgreen;
+}
+
+#search-results tr:hover {
+background-color: lightblue;
+cursor: pointer;
+}
+
+.selected {
+  background-color: rgba(41, 103, 182, 0.89);
+  color: #FFF;
+}

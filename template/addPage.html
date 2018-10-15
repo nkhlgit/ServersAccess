@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>AddServer</title>
+		<link rel="stylesheet" type="text/css" href="style/addPage.css"/>
+		<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="script/addPage.js"></script>
+	</head>
+
+	<body>
+		<form id="add-form" onsubmit="return false">
+			<div>
+	  		Name: <input type="text" name="name"><br>
+	  		IP: <input type="text" name="ip"><br>
+				Hostname: <input type="text" name="hostname"><br>
+				OS-User: <input type="text" name="osUser"><br>
+				OS-Password: <input type="text" name="osPassword"><br>
+				OS-Port: <input type="text" name="osPort"><br>
+				Web-Port: <input type="text" name="webPort"><br>
+				Product: <input type="text" name="product"><br>
+				Datacenter: <input type="text" name="datacenter"><br>
+				Web-Prefix: <input type="text" name="webPrefix"><br>
+				Web-Suffix: <input type="text" name="webSuffix"><br>
+				Faviourate: <input type="checkbox" name="fav"><br>
+			<div>
+		</form>
+		<button type="Submit" form="add-form" value="Add" onclick="addSubmit()">Add</button>
+		<button type="Submit" value="back" onclick="addSubmit()"> back</button>
+		<p id="add-result">
+		</p>
+	</body>
