@@ -1,7 +1,7 @@
 # ServersAccess
 The intent of this tool is to simplayfy the access(ssh/winscp/http) of any servers in infrastacture. 
 
-## Achnoledgement
+## Acknowledgement
 I want to extend my thanks to Putty (https://www.putty.org/), Winscp(https://winscp.net) and sqllite (https://www.sqlite.org) for creating an awsome tools.
 ServerAccess tool uses sqllite to store servers information. It send request installed Putty and winscp installed exe on, local machine to invoke connection.
 
