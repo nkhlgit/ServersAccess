@@ -10,10 +10,10 @@ ServerAccess tool uses sqllite to store servers information. It send request ins
 2. download sqllite and place it in same folder as main.go.
 3. Run main.go 
 4. access http://localhost:8080
-5. For bulk import of server data, please refer the template infra_template.csv.
-  feild : description
-  name = Unique name of the serer. I can any string
-  ip = Serever ip address
+5. For bulk import of server data, please refer the template infra_template.csv.<br />
+  feild : description<br />
+  name = Unique name of the serer. I can any string.<br />
+  ip = Serever ip address.<br />
   hostname = server hostname
   osUser = User access of OS. this user will be used for ssh and RDP access
   osPassword = osUser Password
