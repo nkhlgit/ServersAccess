@@ -14,13 +14,13 @@ ServerAccess tool uses sqllite to store servers information. It send request ins
   feild : description<br />
   name = Unique name of the serer. I can any string.<br />
   ip = Serever ip address.<br />
-  hostname = server hostname
-  osUser = User access of OS. this user will be used for ssh and RDP access
-  osPassword = osUser Password
-  osPort = port open for SSH / RDP
-  webPort = port open for we access
-  product = Product for user refrence
-  datacenter = Name of data centter for user refrence.
-  webPrefix = web prefix like http or https.
-  webSuffix = web-suiiffx. anyting after htt://server-IP:Port/
-  fav = (y/n) reserfed for futhure use to add faviourate servers.
+  hostname = server hostname.<br />
+  osUser = User access of OS. this user will be used for ssh and RDP access.<br />
+  osPassword = osUser Password.<br />
+  osPort = port open for SSH / RDP.<br />
+  webPort = port open for we access.<br />
+  product = Product for user refrence.<br />
+  datacenter = Name of data centter for user refrence.<br />
+  webPrefix = web prefix like http or https.<br />
+  webSuffix = web-suiiffx. anyting after htt://server-IP:Port.<br />
+  fav = (y/n) reserfed for futhure use to add faviourate servers..<br />
