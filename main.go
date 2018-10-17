@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -157,21 +158,8 @@ func connect(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func addSubmit(w http.ResponseWriter, r *http.Request) {
-	// get the form data entered in add-form with name as in form
-	r.ParseForm()
-	var s server
-	ss := make([]server, 1)
-	s.Name, s.IP, s.Hostname, s.OsUser, s.OsPassword, s.OsPort, s.WebPort, s.Product, s.Datacenter, s.WebPrefix, s.WebSuffix, s.Fav = r.Form["name"][0],
-		r.Form["ip"][0], r.Form["hostname"][0], r.Form["osUser"][0], r.Form["osPassword"][0], r.Form["osPort"][0], r.Form["webPort"][0], r.Form["product"][0],
-		r.Form["datacenter"][0], r.Form["webPrefix"][0], r.Form["webSuffix"][0], r.Form["fav"][0]
-	ss[0] = s
-	res := addServerDb(ss)
-	w.Write([]byte(res))
-	return
-}
-
-func addServerDb(ss []server) (res string) {
+// function addServerDb add string to database used in addSubmit and upload dunctions
+func addServerDb(ss [][]string) (res string) {
 	res = "Server added: "
 	db, _ := sql.Open("sqlite3", "./dc.db")
 	statement, _ := db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
@@ -180,16 +168,57 @@ func addServerDb(ss []server) (res string) {
 	var timeNow string
 	for _, s := range ss {
 		timeNow = time.Now().Format(time.RFC3339)
-		_, err := statement.Exec(s.Name, s.IP, s.Hostname, s.OsUser, s.OsPassword, s.OsPort, s.WebPort,
-			s.Product, s.Datacenter, s.WebPrefix, s.WebSuffix, s.Fav, timeNow, timeNow, timeNow)
+		/*
+			s[0] = Name, s[1] = IP, s[2] = Hostname, s[3] = OsUser, s[4] = OsPassword, s[5] = OsPort, s[6] = WebPort,
+			s[7]=Product, s[8]=Datacenter, s[9]=WebPrefix, s[10]=WebSuffix, s[11]=Fav, timeNow = dateTimeCreated,
+			 timeNow = dateTimeModified, timeNow = dateTimeLastAccessed
+		*/
+		_, err := statement.Exec(s[0], s[1], s[2], s[3], s[4], s[5], s[6],
+			s[7], s[8], s[9], s[10], s[11], timeNow, timeNow, timeNow)
 		if err != nil {
 			res = res + " " + err.Error()
 		} else {
-			res = res + " " + s.Name
+			res = res + " " + s[0]
 		}
 	}
 	db.Close()
 	return res
+}
+
+//function addSubmit submit 1 add request
+func addSubmit(w http.ResponseWriter, r *http.Request) {
+	// get the form data entered in add-form with name as in form
+	r.ParseForm()
+	//create  string aray 's' from form
+	s := []string{r.Form["name"][0],
+		r.Form["ip"][0], r.Form["hostname"][0], r.Form["osUser"][0], r.Form["osPassword"][0], r.Form["osPort"][0], r.Form["webPort"][0], r.Form["product"][0],
+		r.Form["datacenter"][0], r.Form["webPrefix"][0], r.Form["webSuffix"][0], r.Form["fav"][0]}
+	// define two dimention array 'ss'
+	ss := make([][]string, 1)
+	ss[0] = s
+	// send ss to add to db
+	res := addServerDb(ss)
+	//write response
+	w.Write([]byte(res))
+	return
+}
+
+func upload(w http.ResponseWriter, r *http.Request) {
+	// add http request file to memeory
+	r.ParseMultipartForm(32 << 20)
+	//open the form file
+	csvFile, _, err := r.FormFile("uploadfile")
+	chkErr(err)
+	defer csvFile.Close()
+	reader := csv.NewReader(csvFile)
+	reader.FieldsPerRecord = -1
+	csvData, err := reader.ReadAll()
+	chkErr(err)
+	//strip header ;and  send csvDada as string [][].
+	res := addServerDb(csvData[1:])
+	//write response to hrrp response
+	w.Write([]byte(res))
+	return
 }
 
 func deleteServer(w http.ResponseWriter, r *http.Request) {
@@ -198,7 +227,6 @@ func deleteServer(w http.ResponseWriter, r *http.Request) {
 		DelSrvId string
 	}
 	var t deleteData
-
 	//decode the recived reeq body in json format
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&t)
@@ -212,7 +240,7 @@ func deleteServer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		res = err.Error()
 	} else {
-		res = "Server is " + t.DelSrvId + " is deleted."
+		res = "Server " + t.DelSrvId + " is deleted."
 	}
 	w.Write([]byte(res))
 	db.Close()
@@ -227,9 +255,9 @@ func main() {
 	r.HandleFunc("/addPage", addPage)
 	r.HandleFunc("/addSubmit", addSubmit)
 	r.HandleFunc("/deleteServer", deleteServer)
+	r.HandleFunc("/upload", upload)
 	//Specifying the http file location for CSS
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./template/")))
-
 	http.Handle("/", r)
 	fmt.Println(http.ListenAndServe(":8080", nil))
 }
