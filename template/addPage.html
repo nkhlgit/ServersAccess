@@ -9,36 +9,32 @@
 	</head>
 
 	<body>
-			<button type="Submit" value="back" onclick="goBack()" onsubmit="return false"> back</button>
+		<button type="Submit" value="back" onclick="goBack()" onsubmit="return false"> back</button>
 		<div id="oneSrvAdd">
 			<h4>Add one server</h4>
 			<form id="add-form" onsubmit="return false">
-				<div>
 	  			Name: <input type="text" name="name"><br>
 	  			IP: <input type="text" name="ip"><br>
-					Hostname: <input type="text" name="hostname"><br>
-					OS-User: <input type="text" name="osUser"><br>
-					OS-Password: <input type="text" name="osPassword"><br>
-					OS-Port: <input type="text" name="osPort"><br>
-					Web-Port: <input type="text" name="webPort"><br>
-					Product: <input type="text" name="product"><br>
-					Datacenter: <input type="text" name="datacenter"><br>
-					Web-Prefix: <input type="text" name="webPrefix"><br>
-					Web-Suffix: <input type="text" name="webSuffix"><br>
-					Faviourate: <input type="checkbox" name="fav"><br>
-			<div>
-		</form>
+				Hostname: <input type="text" name="hostname"><br>
+				OS-User: <input type="text" name="osUser"><br>
+				OS-Password: <input type="text" name="osPassword"><br>
+				OS-Port: <input type="text" name="osPort"><br>
+				Web-Port: <input type="text" name="webPort"><br>
+				Product: <input type="text" name="product"><br>
+				Datacenter: <input type="text" name="datacenter"><br>
+				Web-Prefix: <input type="text" name="webPrefix"><br>
+				Web-Suffix: <input type="text" name="webSuffix"><br>
+				Faviourate: <input type="checkbox" name="fav"><br>
+			</form>
 		<button type="Submit" form="add-form" value="Add" onclick="addSubmit()" onsubmit="return false">Add</button>
-	</div>
-	<hr>
-<div id="manyServerAdd">
-	<h4>Bulk import servers</h4>
-	<form enctype="multipart/form-data" action="http://127.0.0.1:8080/upload" method="post">
-		<input type="file" name="uploadfile" />
-		<input type="hidden" name="token" value="{{.}}"/>
-		<input type="submit" value="upload" />
-	</form>
-</div>
-<p id="add-result">
-</p>
+		<p id="add-result"></p>
+		</div>
+		<hr>
+		<div id="manyServerAdd" >
+			<h4>Bulk import servers</h4>
+			<input id="the-file"enctype="multipart/form-data" type="file" name="uploadFile" accept=".csv"  onchange="uploadFunction()" onsubmit="return false"><br>
+			<progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+			<h3 id="status">status</h3>
+			<p id="loaded_n_total">Total</p>
+		</div>
 	</body>
