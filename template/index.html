@@ -5,12 +5,11 @@
 		<title>DATACENTER</title>
 		<link rel="stylesheet" type="text/css" href="style/index.css"/>
 		<script type="text/javascript" src="script/jquery-3.3.1.min.js"></script>
-		<script type="text/javascript" src="script/tbody1.js"></script>
+		<script type="text/javascript" src="script/index.js"></script>
 	</head>
 
 	<body>
 		<div id="message">
-		
 		</div>
 		<div id="connect" >
 			<form id="ftp-form"   onsubmit="return false" >
@@ -35,6 +34,9 @@
 			<form id="delete-form"   onsubmit="return false" >
 					<input type="button" value="Delete" onclick='deleteServer()' />
 			</form>
+			<form id="edit-form"   onsubmit="return false" >
+					<input type="button" value="Edit" onclick='editServer()' />
+			</form>
 </div>
 		<table width=100%>
 			<thead >
@@ -52,8 +54,8 @@
 				<link rel="stylesheet" type="text/css" href="style/index.css"/>
 			</tbody>
 		</table>
-		
-	
+
+
 	</body>
 
 </html>
