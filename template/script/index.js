@@ -12,11 +12,17 @@ function rowSelect(resultID){
                         return false;
 }
 
+function queryFunc(){
+   $("#search-form").toggle();
+   //e.preventDefault();
+   return false;
+}
+
 function submitSearch() {
   $.ajax({
     url: "/search",
     method: "POST",
-    data: $("#search-form").serialize(),
+    data:  $("#search-form").serialize(),
     success: function(rawData) {
       var parsed = JSON.parse(rawData);
       if (!parsed) return;

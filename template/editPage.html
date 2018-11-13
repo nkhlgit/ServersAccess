@@ -12,6 +12,7 @@
 		<button type="Submit" value="back" onclick="goBack()" onsubmit="return false">back</button>
 			<h4>Edit Server Details</h4>
 			<form id="edit-form" onsubmit="return false">
+				<input type="hidden" name="reqType" value="edit" />
 				Server-ID: {{.SrvId}}<input type="hidden" name="srvId" value={{.SrvId}} /><br>
 				Name: <input type="text" name="name" value={{.Name}} /><br>
 	  		IP: <input type="text" name="ip" value={{.IP}} /><br>
@@ -26,7 +27,7 @@
 				Web-Suffix: <input type="text" name="webSuffix" value={{.WebSuffix}} /><br>
 				Faviourate: <input type="checkbox" name="fav" {{.Fav}} /><br>
 			</form>
-		<button type="Submit" form="edit-form" value="Edit" onclick="editSubmit()" onsubmit="return false">Submit</button>
+		<button type="Submit" form="edit-form" value="Edit" onclick="addEditSubmit()" onsubmit="return false">Submit</button>
 		<button type="Submit" value="cancel" onclick="goBack()" onsubmit="return false">cancel</button>
 		<p id="edit-result"></p>
 </body>

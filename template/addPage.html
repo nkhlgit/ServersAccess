@@ -13,6 +13,7 @@
 		<div id="oneSrvAdd">
 			<h4>Add one server</h4>
 			<form id="add-form" onsubmit="return false">
+					<input type="hidden" name="reqType" value="add" />
 	  			Name: <input type="text" name="name"><br>
 	  			IP: <input type="text" name="ip"><br>
 				Hostname: <input type="text" name="hostname"><br>
@@ -26,7 +27,7 @@
 				Web-Suffix: <input type="text" name="webSuffix"><br>
 				Faviourate: <input type="checkbox" name="fav"><br>
 			</form>
-		<button type="Submit" form="add-form" value="Add" onclick="addSubmit()" onsubmit="return false">Add</button>
+		<button type="Submit" form="add-form" value="Add" onclick="addEditSubmit()" onsubmit="return false">Add</button>
 		<p id="add-result"></p>
 		</div>
 		<hr>

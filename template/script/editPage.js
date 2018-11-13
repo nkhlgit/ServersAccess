@@ -4,9 +4,9 @@ function goBack(){
     return false;
 }
 
-function editSubmit() {
+function addEditSubmit() {
   $.ajax({
-    url: "/editSubmit",
+    url: "/addEditSubmit",
     method: "POST",
     data: $("#edit-form").serialize(),
     success: function(rawData) {

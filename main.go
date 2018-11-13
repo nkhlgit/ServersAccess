@@ -63,20 +63,27 @@ func addPage(w http.ResponseWriter, r *http.Request) {
 func search(w http.ResponseWriter, r *http.Request) {
 	var result server
 	var results []server
-	var queryString string
+	filterStr := ""
+	firstArg := true
 	// get the form data entered in search-form with name "search"
-	searchString := r.FormValue("search")
+	r.ParseForm()
+	for key, value := range r.Form {
+		//fmt.Printf("%s --%v", key, value)
+		if len(value[0]) > 0 {
+			if firstArg {
+				filterStr = filterStr + " WHERE "
+				firstArg = false
+			} else {
+				filterStr = filterStr + " AND "
+			}
+			filterStr = filterStr + " " + key + " like '%" + value[0] + "%'"
+		}
 
+	}
 	//columns refered from sql server
 	selectColumns := "srvId,name,ip,hostname,product,datacenter,dateTimeLastAccessed"
-	//If someone put blank search return everything
-	if searchString == "" {
-		queryString = "SELECT " + selectColumns + " FROM servers ORDER BY dateTimeLastAccessed DESC"
-	} else {
-		queryString = "SELECT " + selectColumns + " FROM servers where" +
-			" name like '%" + searchString + "%' ORDER BY dateTimeLastAccessed DESC"
-	}
-
+	queryString := "SELECT " + selectColumns + " FROM servers " +
+		filterStr + " ORDER BY dateTimeLastAccessed DESC"
 	// Open sqlite connection for dc.db. The table the data should be cretaed using csv_to_sql.go tool
 	db, _ := sql.Open("sqlite3", "dc.db")
 	rows, err := db.Query(queryString)
@@ -101,8 +108,6 @@ func search(w http.ResponseWriter, r *http.Request) {
 
 // Connect function will acton ssh request
 func connect(w http.ResponseWriter, r *http.Request) {
-	//conString := r.FormValue("conForm")
-	//fmt.Println(conString)
 	var result server
 	//var results []server
 	type accessData struct {
@@ -151,57 +156,6 @@ func connect(w http.ResponseWriter, r *http.Request) {
 	if err := c.Start(); err != nil {
 		fmt.Println("Error: ", err)
 	}
-}
-
-// function addServerDb add string to database used in addSubmit and upload dunctions
-func addServerDb(ss [][]string) (res string) {
-	res = "Server added: "
-	db, _ := sql.Open("sqlite3", "./dc.db")
-	statement, _ := db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
-		"webPort,product,datacenter,webPrefix,webSuffix,fav, dateTimeCreated, dateTimeModified," +
-		"dateTimeLastAccessed ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-	var timeNow string
-	for _, s := range ss {
-		timeNow = time.Now().Format(time.RFC3339)
-		/*
-			s[0] = Name, s[1] = IP, s[2] = Hostname, s[3] = OsUser, s[4] = OsPassword, s[5] = OsPort, s[6] = WebPort,
-			s[7]=Product, s[8]=Datacenter, s[9]=WebPrefix, s[10]=WebSuffix, s[11]=Fav, timeNow = dateTimeCreated,
-			 timeNow = dateTimeModified, timeNow = dateTimeLastAccessed
-		*/
-		_, err := statement.Exec(s[0], s[1], s[2], s[3], s[4], s[5], s[6],
-			s[7], s[8], s[9], s[10], s[11], timeNow, timeNow, timeNow)
-		if err != nil {
-			res = res + " " + err.Error()
-		} else {
-			res = res + " " + s[0]
-		}
-	}
-	db.Close()
-	return res
-}
-
-//function addSubmit submit 1 add request
-func addSubmit(w http.ResponseWriter, r *http.Request) {
-	// get the form data entered in add-form with name as in form
-	r.ParseForm()
-	//upon check "OK" comes from DB. Here charing it true/false
-	favBool := "false"
-	if _, ok := r.Form["fav"]; ok {
-		favBool = "true"
-	}
-
-	//create  string aray 's' from form
-	s := []string{r.Form["name"][0],
-		r.Form["ip"][0], r.Form["hostname"][0], r.Form["osUser"][0], r.Form["osPassword"][0], r.Form["osPort"][0], r.Form["webPort"][0], r.Form["product"][0],
-		r.Form["datacenter"][0], r.Form["webPrefix"][0], r.Form["webSuffix"][0], favBool}
-	// define two dimention array 'ss'
-	ss := make([][]string, 1)
-	ss[0] = s
-	// send ss to add to db
-	res := addServerDb(ss)
-	//write response
-	w.Write([]byte(res))
-	return
 }
 
 func upload(w http.ResponseWriter, r *http.Request) {
@@ -280,18 +234,22 @@ func editPage(w http.ResponseWriter, r *http.Request) {
 }
 
 // function addServerDb add string to database used in addSubmit and upload dunctions
-func editServerDb(ss [][]string) (res string) {
-	res = "Server data modified: "
+func addServerDb(ss [][]string) (res string) {
+	res = "Server added: "
 	db, _ := sql.Open("sqlite3", "./dc.db")
-	dbQueryString := "UPDATE servers SET name=?,ip=?,hostname=?,osUser=?,osPassword=?,osPort=?," +
-		"webPort=?,product=?,datacenter=?,webPrefix=?,webSuffix=?,fav=? where srvId =?"
-	statement, _ := db.Prepare(dbQueryString)
+	statement, _ := db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
+		"webPort,product,datacenter,webPrefix,webSuffix,fav, dateTimeCreated, dateTimeModified," +
+		"dateTimeLastAccessed ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	var timeNow string
 	for _, s := range ss {
+		timeNow = time.Now().Format(time.RFC3339)
 		/*
-			s[0] = SrvId,s[1] = Name, s[2] = IP, s[3] = Hostname, s[4] = OsUser, s[5] = OsPassword, s[6] = OsPort, s[7] = WebPort,
-			s[8]=Product, s[9]=Datacenter, s[10]=WebPrefix, s[11]=WebSuffix, s[12]=Fav
+			s[0] = Name, s[1] = IP, s[2] = Hostname, s[3] = OsUser, s[4] = OsPassword, s[5] = OsPort, s[6] = WebPort,
+			s[7]=Product, s[8]=Datacenter, s[9]=WebPrefix, s[10]=WebSuffix, s[11]=Fav, timeNow = dateTimeCreated,
+			 timeNow = dateTimeModified, timeNow = dateTimeLastAccessed
 		*/
-		_, err := statement.Exec(s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], s[12], s[0])
+		_, err := statement.Exec(s[0], s[1], s[2], s[3], s[4], s[5], s[6],
+			s[7], s[8], s[9], s[10], s[11], timeNow, timeNow, timeNow)
 		if err != nil {
 			res = res + " " + err.Error()
 		} else {
@@ -302,7 +260,31 @@ func editServerDb(ss [][]string) (res string) {
 	return res
 }
 
-func editSubmit(w http.ResponseWriter, r *http.Request) {
+// function addServerDb add string to database used in addSubmit and upload dunctions
+func editServerDb(ss [][]string, srvId string) (res string) {
+	res = "Server data modified: "
+	db, _ := sql.Open("sqlite3", "./dc.db")
+	dbQueryString := "UPDATE servers SET name=?,ip=?,hostname=?,osUser=?,osPassword=?,osPort=?," +
+		"webPort=?,product=?,datacenter=?,webPrefix=?,webSuffix=?,fav=? where srvId =?"
+	statement, _ := db.Prepare(dbQueryString)
+	fmt.Printf("\nsrvID == %s\n", srvId)
+	for _, s := range ss {
+		/*
+			srvId = SrvId,s[0] = Name, s[1] = IP, s[2] = Hostname, s[3] = OsUser, s[4] = OsPassword, s[6] = OsPort, s[7] = WebPort,
+			s[8]=Product, s[9]=Datacenter, s[10]=WebPrefix, s[11]=WebSuffix, s[12]=Fav
+		*/
+		_, err := statement.Exec(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], srvId)
+		if err != nil {
+			res = res + " " + err.Error()
+		} else {
+			res = res + " " + s[0]
+		}
+	}
+	db.Close()
+	return res
+}
+
+func addEditSubmit(w http.ResponseWriter, r *http.Request) {
 	// get the form data entered in add-form with name as in form
 	r.ParseForm()
 	//Converint checked input to /true/false
@@ -310,14 +292,23 @@ func editSubmit(w http.ResponseWriter, r *http.Request) {
 	if _, ok := r.Form["fav"]; ok {
 		favBool = "true"
 	}
-	s := []string{r.Form["srvId"][0], r.Form["name"][0],
+	fmt.Print("%v", r.Form)
+	s := []string{r.Form["name"][0],
 		r.Form["ip"][0], r.Form["hostname"][0], r.Form["osUser"][0], r.Form["osPassword"][0], r.Form["osPort"][0], r.Form["webPort"][0], r.Form["product"][0],
 		r.Form["datacenter"][0], r.Form["webPrefix"][0], r.Form["webSuffix"][0], favBool}
+
 	// define two dimention array 'ss'
 	ss := make([][]string, 1)
 	ss[0] = s
 	// send ss to add to db
-	res := editServerDb(ss)
+	res := ""
+	switch r.Form["reqType"][0] {
+	case "add":
+		res = addServerDb(ss)
+	case "edit":
+		fmt.Printf("\nFrom Value== %s\n", r.Form["srvId"][0])
+		res = editServerDb(ss, r.Form["srvId"][0])
+	}
 	//write response
 	w.Write([]byte(res))
 	return
@@ -329,11 +320,11 @@ func main() {
 	r.HandleFunc("/search", search)
 	r.HandleFunc("/connect", connect)
 	r.HandleFunc("/addPage", addPage)
-	r.HandleFunc("/addSubmit", addSubmit)
+	//r.HandleFunc("/addSubmit", addSubmit)
 	r.HandleFunc("/deleteServer", deleteServer)
 	r.HandleFunc("/upload", upload)
 	r.HandleFunc("/editPage", editPage)
-	r.HandleFunc("/editSubmit", editSubmit)
+	r.HandleFunc("/addEditSubmit", addEditSubmit)
 	//Specifying the http file location for CSS
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./template/")))
 	http.Handle("/", r)
