@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -84,6 +85,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	selectColumns := "srvId,name,ip,hostname,product,datacenter,dateTimeLastAccessed"
 	queryString := "SELECT " + selectColumns + " FROM servers " +
 		filterStr + " ORDER BY dateTimeLastAccessed DESC"
+	//fmt.Printf("\n%s\n", queryString)
 	// Open sqlite connection for dc.db. The table the data should be cretaed using csv_to_sql.go tool
 	db, _ := sql.Open("sqlite3", "dc.db")
 	rows, err := db.Query(queryString)
@@ -237,7 +239,11 @@ func editPage(w http.ResponseWriter, r *http.Request) {
 func addServerDb(ss [][]string) (res string) {
 	res = "Server added: "
 	db, _ := sql.Open("sqlite3", "./dc.db")
-	statement, _ := db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
+	statement, _ := db.Prepare("CREATE TABLE IF NOT EXISTS servers (srvId INTEGER PRIMARY KEY, name TEXT," +
+		"ip TEXT,hostname TEXT,osUser TEXT,osPassword TEXT,osPort TEXT,webPort TEXT,product TEXT,datacenter TEXT," +
+		"webPrefix TEXT,webSuffix TEXT, fav TEXT, dateTimeCreated TEXT, dateTimeModified TEXT, dateTimeLastAccessed TEXT)")
+	statement.Exec()
+	statement, _ = db.Prepare("INSERT INTO servers (name,ip,hostname,osUser,osPassword,osPort," +
 		"webPort,product,datacenter,webPrefix,webSuffix,fav, dateTimeCreated, dateTimeModified," +
 		"dateTimeLastAccessed ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	var timeNow string
@@ -290,7 +296,9 @@ func addEditSubmit(w http.ResponseWriter, r *http.Request) {
 	//Converint checked input to /true/false
 	favBool := "false"
 	if _, ok := r.Form["fav"]; ok {
-		favBool = "true"
+		if strings.EqualFold(r.Form["fav"][0], "true") || r.Form["fav"][0] == "on" {
+			favBool = "true"
+		}
 	}
 	fmt.Print("%v", r.Form)
 	s := []string{r.Form["name"][0],
@@ -320,7 +328,6 @@ func main() {
 	r.HandleFunc("/search", search)
 	r.HandleFunc("/connect", connect)
 	r.HandleFunc("/addPage", addPage)
-	//r.HandleFunc("/addSubmit", addSubmit)
 	r.HandleFunc("/deleteServer", deleteServer)
 	r.HandleFunc("/upload", upload)
 	r.HandleFunc("/editPage", editPage)

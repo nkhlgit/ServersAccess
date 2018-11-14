@@ -12,6 +12,7 @@ function rowSelect(resultID){
                         return false;
 }
 
+
 function queryFunc(){
    $("#search-form").toggle();
    //e.preventDefault();
@@ -111,4 +112,19 @@ function editServer(){
      }
         });
 return false;
+}
+
+function allFav(){
+    var x = document.getElementById("sDiv");
+      var y = document.getElementById("fav-query");
+      if (x.innerHTML === "Show-All") {
+          x.innerHTML = "Show-Fav";
+          y.value = "false";
+
+      } else {
+          x.innerHTML = "Show-All";
+          y.value = "true";
+        }
+        submitSearch();
+ return false;
 }

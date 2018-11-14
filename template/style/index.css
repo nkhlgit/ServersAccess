@@ -1,6 +1,5 @@
 body {
   color: black;
-  background: lightblue;
 }
 
 #house form
@@ -16,14 +15,15 @@ body {
 }
 
 thead {
-  background: green;
+  background-color:hsl(120,100%,25%,0.6);
 }
 
 body table tbody {
-  background: lightgreen;
+  background-color:hsl(120,60%,70%,0.3);
 }
 
 #search-results tr:hover {
+font-size: 20px;
 background-color: lightblue;
 cursor: pointer;
 }

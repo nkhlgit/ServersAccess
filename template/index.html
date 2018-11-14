@@ -24,6 +24,7 @@
 		</div>
 
 		<div id="house" >
+			<button  id="all-fav"  form="search-form" onclick="allFav()"><div id="sDiv">Show-All</div></button>
 			<form id="addServer"   onsubmit="return false" >
 					<input type="button" value="AddServer" onclick='addPage()' />
 			</form>
@@ -45,6 +46,7 @@
 						<th width="10%">Hostname</th>
 						<th width="10%">Product</th>
 						<th width="10%">Datacenter</th>
+						<th width="10%">Favourite</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -55,9 +57,11 @@
 						<th><input name="hostname"/></th>
 						<th><input name="product"/></th>
 						<th><input name="datacenter"/></th>
+						<th><input id="fav-query" name="fav" value="true" readonly><th>
 				</tr>
 			</tbody>
 		</table>
+
 	<input type="submit"  form="search-form" value="Search" onclick="submitSearch()" onsubmit="return false" />
 	</form>
 		<table width="100%">
