@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -154,10 +156,10 @@ func connect(w http.ResponseWriter, r *http.Request) {
 	stmt.Exec(timeNow, t.SID)
 	chkErr(err)
 	//windows command executed with start
-	c := exec.Command(prog, progArg)
-	if err := c.Start(); err != nil {
-		fmt.Println("Error: ", err)
-	}
+	cmdInstance := exec.Command(prog, progArg)
+	cmdInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	_, err = cmdInstance.Output()
+	chkErr(err)
 }
 
 func upload(w http.ResponseWriter, r *http.Request) {
@@ -321,6 +323,9 @@ func addEditSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(res))
 	return
 }
+func killMe(w http.ResponseWriter, r *http.Request) {
+	os.Exit(3)
+}
 
 func main() {
 	r := mux.NewRouter()
@@ -332,6 +337,7 @@ func main() {
 	r.HandleFunc("/upload", upload)
 	r.HandleFunc("/editPage", editPage)
 	r.HandleFunc("/addEditSubmit", addEditSubmit)
+	r.HandleFunc("/killMe", killMe)
 	//Specifying the http file location for CSS
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./template/")))
 	http.Handle("/", r)

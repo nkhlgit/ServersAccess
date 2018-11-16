@@ -2,16 +2,35 @@ body {
   color: black;
 }
 
+#shutdown {
+  float:right;
+}
+
+#shutdown{
+  float:inline-left;
+}
+#message{
+  background-color:hsl(37, 100%, 88%);
+  display:inline-block;
+  left: 0;
+right: 0;
+}
+
+#twoDiv {
+  display:block;
+}
+
+
 #house form
 {
     display: inline-block;
-    float: left;
+    float: right;
 }
 
 #connect form
 {
     display: inline-block;
-    float: right;
+    float: left;
 }
 
 thead {
@@ -19,13 +38,12 @@ thead {
 }
 
 body table tbody {
-  background-color:hsl(120,60%,70%,0.3);
+  background-color:hsl(206, 100%, 91%,0.3);
 }
 
 #search-results tr:hover {
 font-size: 20px;
-background-color: lightblue;
-cursor: pointer;
+background-color: hsl(146, 100%, 20%,0.4);
 }
 
 .selected {

@@ -1,0 +1,8 @@
+name,ip,hostname,osUser,osPassword,osPort,webPort,product,datacenter,webPrefix,webSuffix,fav
+ACR-Master-hbf,10.133.30.15,unknown,witness,eQuality,22,8080,ACR,Global,http,,true
+CM-SIL-LAB,10.133.15.37,unknown,init,itsgrand3,22,80,CM,Global,http,,true
+Master-RD151fp2,10.133.30.232,unknown,witness,eQuality,22,8080,ACR,Global,http,,true
+Stanby-RD151fp2,10.133.30.233,unknown,witness,eQuality,22,8080,ACR,Global,http,,false
+Slave1-RD151fp2,10.133.30.234,unknown,witness,eQuality,22,8080,ACR,Global,http,,true
+Slave2-RD151fp2,10.133.30.235,unknown,witness,eQuality,22,8080,ACR,Global,http,,false
+CRS-RD151fp2,10.133.30.236,unknown,witness,eQuality,22,8080,ACR,Global,http,,true

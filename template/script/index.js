@@ -20,6 +20,8 @@ function queryFunc(){
 }
 
 function submitSearch() {
+  var searchResults = $("#search-results");
+  searchResults.empty();
   $.ajax({
     url: "/search",
     method: "POST",
@@ -27,8 +29,6 @@ function submitSearch() {
     success: function(rawData) {
       var parsed = JSON.parse(rawData);
       if (!parsed) return;
-      var searchResults = $("#search-results");
-      searchResults.empty();
       parsed.forEach(function(result) {
           var row = $('<tr id="my' + result.SrvId + '" onclick="rowSelect(' + result.SrvId +
            ')"><td>' + result.SrvId + "</td><td>" + result.Name +
@@ -117,14 +117,27 @@ return false;
 function allFav(){
     var x = document.getElementById("sDiv");
       var y = document.getElementById("fav-query");
+      var z = document.getElementById("fav-view");
       if (x.innerHTML === "Show-All") {
           x.innerHTML = "Show-Fav";
-          y.value = "false";
+          y.value = "e";
+          z.innerHTML = "View-All";
 
       } else {
           x.innerHTML = "Show-All";
           y.value = "true";
+          z.innerHTML = "Fav-Only";
         }
         submitSearch();
  return false;
+}
+
+function killMe(){
+    $.ajax({
+  url: "/killMe",
+  method: "POST",
+  success: function(rowData){
+  $('#message').html("Bye!");
+  }
+});
 }

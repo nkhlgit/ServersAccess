@@ -7,9 +7,9 @@ ServerAccess tool uses sqllite to store servers information. It send request ins
 
 ## How to use
 1. install putty and windscp.
-2. download sqllite and place it in same folder as main.go.
-3. Run main.go 
-4. access http://localhost:8080
+2. downlaod the zip file form  https://github.com/nkhlgit/ServersAccess/archive/master.zip
+3. extract the zip file. I have placed copy of sqlite.exe. In case yo want to use latest version , you can download sqllite.exe and place it in same folder.
+4. Run ServerAccess.exe; thereafter access http://localhost:8080 from url.
 5. For bulk import of server data, please refer the template infra_template.csv.<br />
   feild : description<br />
   name = Unique name of the serer. I can any string.<br />
