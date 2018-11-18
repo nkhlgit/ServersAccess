@@ -6,11 +6,19 @@ body {
   float:right;
 }
 
-#shutdown{
-  float:inline-left;
+button, .b1  {
+background-color:hsl(0, 100%, 80%,0.9);
+ cursor: pointer;
+ border-radius: 8px
 }
+
+button:hover, .b1:hover {
+  background-color:hsl(55, 100%, 80%,0.4);
+  border-radius: 2px
+}
+
 #message{
-  background-color:hsl(37, 100%, 88%);
+  background-color:hsl(57, 100%, 50%);
   display:inline-block;
   left: 0;
 right: 0;
@@ -23,7 +31,7 @@ right: 0;
 
 #house form
 {
-    display: inline-block;
+display: inline-block;
     float: right;
 }
 
@@ -38,12 +46,13 @@ thead {
 }
 
 body table tbody {
-  background-color:hsl(206, 100%, 91%,0.3);
+  background-color:hsl(206, 100%, 91%,0.6);
 }
 
 #search-results tr:hover {
 font-size: 20px;
 background-color: hsl(146, 100%, 20%,0.4);
+ cursor: pointer;
 }
 
 .selected {

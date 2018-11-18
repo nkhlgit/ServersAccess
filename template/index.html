@@ -11,36 +11,36 @@
 	<body>
 		<div id="oneDiv">
 			<button  id="all-fav"  form="search-form" onclick="allFav()"><div id="sDiv">Show-All</div></button>
-			<button id="shutdown" type="button" onclick="killMe()">shutdown</button>
+			<button id="shutdown" type="button" onclick="killMe()">Shutdown</button>
 			<div id="message"></div>
 		</div>
 				<p style="display:none"></p>
 <div id="twoDiv">
 		<div id="connect">
 			<form id="ftp-form"  onsubmit="return false" >
-					<input type="button" value="FTP" onclick='access("ftp")' />
+					<input class="b1" type="button" value="FTP" onclick='access("ftp")' />
 			</form>
 			<form id="web-form"   onsubmit="return false" >
-					<input type="button" value="WEB" onclick='access("web")' />
+					<input class="b1" type="button" value="WEB" onclick='access("web")' />
 			</form>
 			<form id="ssh-form"   onsubmit="return false" >
-					<input type="button" value="SSH" onclick='access("ssh")' />
+					<input class="b1" type="button" value="SSH" onclick='access("ssh")' />
 			</form>
 		</div>
 		<div id="house" >
 			<form id="addServer"   onsubmit="return false" >
-					<input type="button" value="AddServer" onclick='addPage()' />
+					<input class="b1" type="button" value="AddServer" onclick='addPage()' />
 			</form>
 			<form id="delete-form"   onsubmit="return false" >
-					<input type="button" value="Delete" onclick='deleteServer()' />
+					<input class="b1" type="button"  value="Delete" onclick='deleteServer()' />
 			</form>
 			<form id="edit-form"   onsubmit="return false" >
-					<input type="button" value="Edit" onclick='editServer()' />
+					<input class="b1" type="button" value="Edit" onclick='editServer()' />
 			</form>
 			<button  id="query-button" onclick="queryFunc()" >Query</button>
 		</div>
-
 	</div>
+	<p style="display:none"></p>
 	<form id="search-form" onsubmit="return false" style="display:none" >
 			<table width="80%">
 				<thead >
@@ -67,7 +67,7 @@
 			</tbody>
 		</table>
 	<input type="hidden" id="fav-query" name="fav" value="true"/>
-	<input type="submit"  form="search-form" value="Search" onclick="submitSearch()" onsubmit="return false" />
+	<input class="b1" type="submit"  form="search-form" value="Search" onclick="submitSearch()" onsubmit="return false" />
 	</form>
 		<table width="100%">
 			<thead >
